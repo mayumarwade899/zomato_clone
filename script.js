@@ -95,7 +95,21 @@ function updateMapView() {
 //3) Select the valet with shortest distance & minimum orders
 
 function startSearchingForValets() {
-    
+    //Step 1 - Get Valet
+    const valetPromises = [];
+    for(let i=0; i<5; i++) {
+        valetPromises.push(getRandomDriver());
+    }
+    console.log(valetPromises);
+
+    Promise.any(valetPromises)
+    .then(selectedValet => {
+        console.log('Valet has been assigned - ', selectedValet);
+        isValetFound = true;
+    })
+    .catch(err => {
+        console.error(err);
+    })
 }
 
 function getRandomDriver() {
