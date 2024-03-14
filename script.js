@@ -55,7 +55,7 @@ function startPreparingOrder() {
     Promise.all ([
         updateOrderStatus(),
         updateMapView(),
-        // startSearchingForValets(),
+        startSearchingForValets(),
         // checkForOrderDelivery()
     ])
     .then(res => {
@@ -80,11 +80,30 @@ function updateOrderStatus() {
 }
 
 function updateMapView() {
+    //Fake Delay
     return new Promise((resolve, reject) => {
         setTimeout(() => {
             document.getElementById('mapview').style.opacity = '1';
             resolve('Map Intialized!');
-        }, 1000)
+        }, 1000);
     })
 }
 
+//Complex Operation :-
+//1) Get all the locations of nearby valets
+//2) Sort the valets based on shortest path of restaurant to customer's location
+//3) Select the valet with shortest distance & minimum orders
+
+function startSearchingForValets() {
+    
+}
+
+function getRandomDriver() {
+    // Fake delay to get location data from driver
+    return new Promise((resolve, reject) => {
+        const timeout = Math.random() * 5000;
+        setTimeout(() => {
+            resolve('Valet - ' + timeout);
+        }, timeout);
+    });
+}
