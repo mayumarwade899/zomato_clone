@@ -2,12 +2,17 @@ let isOrderAccepted = false;
 let isValetFound = false;
 let hasRestaurantSeenYourOrder = false;
 let restaurantTimer = null;
+let valetTimer = null;
 
 //zomato app - boot up/start/powerup
 window.addEventListener('load', function () {
     document.getElementById('acceptorder').addEventListener('click', function () {
         askRestaurantAcceptOrReject();
     });
+
+    this.document.getElementById('findValet').addEventListener('click', () => {
+        startSearchingForValets();
+    })
 
     hasOrderAcceptedFromRestaurant()
         .then(isOrderAccepted => {
@@ -55,7 +60,7 @@ function startPreparingOrder() {
     Promise.all ([
         updateOrderStatus(),
         updateMapView(),
-        startSearchingForValets(),
+        checkIfValetAssigned(),
         // checkForOrderDelivery()
     ])
     .then(res => {
@@ -120,4 +125,17 @@ function getRandomDriver() {
             resolve('Valet - ' + timeout);
         }, timeout);
     });
+}
+
+function checkIfValetAssigned() {
+    return new Promise((resolve, reject) => {
+        valetTimer = setInterval(() => {
+            console.log('Searching for valet');
+            if(isValetFound) {
+                updateValetDetails();
+                resolve('Update valet details');
+                clearTimeout(valetTimer)
+            }
+        }, 1000);
+    })
 }
