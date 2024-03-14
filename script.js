@@ -55,16 +55,36 @@ function startPreparingOrder() {
     Promise.all ([
         updateOrderStatus(),
         updateMapView(),
-        startSearchingForValets(),
-        checkForOrderDelivery()
+        // startSearchingForValets(),
+        // checkForOrderDelivery()
     ])
     .then(res => {
         console.log(res);
         setTimeout(() => {
             alert('How was your food? Rate your food & delivery partner!')
-        }, 2000);
+        }, 5000);
     })
     .catch(err => {
         console.error(err);
     })
 }
+
+// Helper Functions - pure functions
+function updateOrderStatus() {
+    return new Promise((resolve, reject) => {
+        setTimeout(() => {
+            document.getElementById('currentStatus').innerText = 'Start Preparation...';
+            resolve('Status Updated');
+        }, 1500);
+    });
+}
+
+function updateMapView() {
+    return new Promise((resolve, reject) => {
+        setTimeout(() => {
+            document.getElementById('mapview').style.opacity = '1';
+            resolve('Map Intialized!');
+        }, 1000)
+    })
+}
+
