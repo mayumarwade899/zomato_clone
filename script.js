@@ -13,7 +13,7 @@ window.addEventListener('load', function () {
         .then(isOrderAccepted => {
             console.log('Updated from Restaurant -',isOrderAccepted);
 
-            if(isOrderAccepted) alert('Your order has been Accepted!!!!');
+            if(isOrderAccepted) startPreparingOrder();
 
             //Step 3 - Order rejected
             else alert('Sorry, Restaurant rejected your order. Returning the total amount with zomato shares');
@@ -50,3 +50,21 @@ function hasOrderAcceptedFromRestaurant() {
     });
 }
 
+//step 4 - Start Preparing
+function startPreparingOrder() {
+    Promise.all ([
+        updateOrderStatus(),
+        updateMapView(),
+        startSearchingForValets(),
+        checkForOrderDelivery()
+    ])
+    .then(res => {
+        console.log(res);
+        setTimeout(() => {
+            alert('How was your food? Rate your food & delivery partner!')
+        }, 2000);
+    })
+    .catch(err => {
+        console.error(err);
+    })
+}
