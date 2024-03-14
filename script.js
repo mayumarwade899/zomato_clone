@@ -3,6 +3,8 @@ let isValetFound = false;
 let hasRestaurantSeenYourOrder = false;
 let restaurantTimer = null;
 let valetTimer = null;
+let valetDeliveryTimer = null;
+let isOrderDelivered = false;
 
 //zomato app - boot up/start/powerup
 window.addEventListener('load', function () {
@@ -10,9 +12,15 @@ window.addEventListener('load', function () {
         askRestaurantAcceptOrReject();
     });
 
-    this.document.getElementById('findValet').addEventListener('click', () => {
+    document.getElementById('findValet').addEventListener('click', () => {
         startSearchingForValets();
-    })
+    });
+
+    document.getElementById('orderDeliver').addEventListener('click', () => {
+        setTimeout(() => {
+            isOrderDelivered = true;
+        }, 3000);
+    });
 
     hasOrderAcceptedFromRestaurant()
         .then(isOrderAccepted => {
@@ -61,7 +69,7 @@ function startPreparingOrder() {
         updateOrderStatus(),
         updateMapView(),
         checkIfValetAssigned(),
-        // checkForOrderDelivery()
+        checkIfOrderDelivered()
     ])
     .then(res => {
         console.log(res);
@@ -78,7 +86,7 @@ function startPreparingOrder() {
 function updateOrderStatus() {
     return new Promise((resolve, reject) => {
         setTimeout(() => {
-            document.getElementById('currentStatus').innerText = 'Start Preparation...';
+            document.getElementById('currentStatus').innerText = isOrderDelivered ? 'Order Delivered succefully' : 'Preparing your order';
             resolve('Status Updated');
         }, 1500);
     });
@@ -139,3 +147,26 @@ function checkIfValetAssigned() {
         }, 1000);
     })
 }
+
+function checkIfOrderDelivered() {
+    return new Promise((resolve, reject) => {
+        valetDeliveryTimer = setInterval(() => {
+            console.log('Is order delivered by valet?');
+            if(isOrderDelivered) {
+                resolve('Order Delivered');
+                updateOrderStatus();
+                clearTimeout(valetDeliveryTimer);
+            }
+        });
+    });
+}
+
+function updateValetDetails() {
+    if(isValetFound) {
+        document.getElementById('finding-driver').classList.add('none');
+
+        document.getElementById('found-driver').classList.remove('none');
+        document.getElementById('call').classList.remove('none');
+    }
+}
+
